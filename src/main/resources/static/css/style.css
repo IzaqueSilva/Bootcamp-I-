@@ -553,14 +553,20 @@ h1, h2, h3, h4, h5, h6, .logo-text {
 }
 .required { color: var(--neon-pink); }
 
-.modern-form input {
+.modern-form input, .modern-form select {
     background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.1);
     padding: 16px 20px; border-radius: 12px; color: var(--text-primary);
     font-family: inherit; font-size: 15px; transition: var(--transition-smooth);
     outline: none; width: 100%;
+    color-scheme: dark; /* Helps native pickers (like date) match the dark theme */
 }
 
-.modern-form input:focus {
+.modern-form select option {
+    background: #0f172a; /* Dark background for dropdown options */
+    color: #fff;
+}
+
+.modern-form input:focus, .modern-form select:focus {
     border-color: var(--neon-cyan); background: rgba(0, 242, 254, 0.05);
     box-shadow: 0 0 0 4px rgba(0, 242, 254, 0.15);
 }
