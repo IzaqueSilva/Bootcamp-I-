@@ -5,7 +5,7 @@
 
 <!-- Título e descrição -->
 <div align="center">
-  <h1>MedAlerta</h1>
+  <h1>MedAlerta - Uninter</h1>
   <p><b>Projeto base para desenvolvimento de um sistema de gerenciamento de medicamentos, preparado com arquitetura em camadas, containers Docker e boas práticas de engenharia de software.</b></p>
 </div>
 
@@ -66,15 +66,27 @@ Esta base será utilizada nas aulas seguintes para implementação de:
 
 # 🏗️ Arquitetura
 
-O projeto segue o padrão de **arquitetura em camadas**:
+O projeto segue o padrão de **arquitetura em camadas** e agora conta também com uma interface web de consumo da API.
 
-Service → Repository → Banco de Dados
+```mermaid
+graph TD
+    Client[Interface Web / Frontend] --> API[API REST / Controllers]
+    API --> Service[Services / Regras de Negócio]
+    Service --> Repository[Repositories / Acesso aos Dados]
+    Repository --> DB[(Banco de Dados MySQL)]
+    
+    style Client fill:#0ea5e9,stroke:#0284c7,stroke-width:2px,color:#fff
+    style API fill:#8b5cf6,stroke:#6d28d9,stroke-width:2px,color:#fff
+    style Service fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff
+    style Repository fill:#f59e0b,stroke:#b45309,stroke-width:2px,color:#fff
+    style DB fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#fff
+```
 
-- **Service**: regras de negócio  
-- **Repository (CRUD)**: acesso aos dados  
-- **Banco (MySQL)**: persistência  
-
-A aplicação poderá ser exposta via API (ex: REST), mas isso não é foco inicial.
+- **Interface Web**: Consome as rotas da API.
+- **Controllers (API REST)**: Recebem e respondem requisições HTTP.
+- **Service**: Validações e regras de negócio.  
+- **Repository (CRUD)**: Conexão e acesso aos dados.  
+- **Banco (MySQL)**: Persistência física das informações.
 
 ---
 

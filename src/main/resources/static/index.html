@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedAlerta - Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Boxicons para ícones elegantes -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <!-- Background Decorativo -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar glass-panel">
+            <div class="logo-area">
+                <i class='bx bx-plus-medical logo-icon'></i>
+                <h1 class="logo-text">Med<span>Alerta</span></h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <i class='bx bx-grid-alt'></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class='bx bx-user-circle'></i>
+                    <span>Pacientes</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class='bx bx-capsule'></i>
+                    <span>Medicamentos</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class='bx bx-bell'></i>
+                    <span>Alertas</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class='bx bx-cog'></i>
+                    <span>Configurações</span>
+                </a>
+            </nav>
+            
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Admin+Root&background=0D8ABC&color=fff" alt="Admin" class="avatar">
+                <div class="user-info">
+                    <p class="user-name">Administrador</p>
+                    <p class="user-role">Clínica Central</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="search-bar glass-panel">
+                    <i class='bx bx-search'></i>
+                    <input type="text" placeholder="Pesquisar pacientes, medicamentos...">
+                </div>
+                
+                <div class="header-actions">
+                    <button class="icon-btn glass-panel"><i class='bx bx-bell'></i><span class="badge">3</span></button>
+                    <button class="icon-btn glass-panel"><i class='bx bx-moon'></i></button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-grid">
+                <!-- Seção de Estatísticas -->
+                <div class="stat-cards">
+                    <div class="stat-card glass-panel accent-blue">
+                        <div class="stat-icon"><i class='bx bx-user'></i></div>
+                        <div class="stat-details">
+                            <h3>Total de Pacientes</h3>
+                            <h2 id="total-users">--</h2>
+                            <p class="trend positive"><i class='bx bx-up-arrow-alt'></i> +12% esta semana</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card glass-panel accent-cyan">
+                        <div class="stat-icon"><i class='bx bx-check-shield'></i></div>
+                        <div class="stat-details">
+                            <h3>Alertas Emitidos</h3>
+                            <h2>1,284</h2>
+                            <p class="trend positive"><i class='bx bx-up-arrow-alt'></i> +5% esta semana</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass-panel accent-purple">
+                        <div class="stat-icon"><i class='bx bx-time-five'></i></div>
+                        <div class="stat-details">
+                            <h3>Adesão ao Tratamento</h3>
+                            <h2>89.5%</h2>
+                            <p class="trend neutral"><i class='bx bx-minus'></i> Estável</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Pacientes (Consumindo a API) -->
+                <section class="data-section glass-panel">
+                    <div class="section-header">
+                        <h2>Lista de Pacientes Registrados</h2>
+                        <button class="primary-btn" onclick="openModal('user-modal')"><i class='bx bx-plus'></i> Novo Paciente</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome do Paciente</th>
+                                    <th>Email</th>
+                                    <th>Telefone</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <tr>
+                                    <td colspan="6" class="loading-state">
+                                        <i class='bx bx-loader-alt bx-spin'></i> Carregando dados da API...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Modal Novo/Editar Paciente -->
+    <div id="user-modal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="modal-title">Novo Paciente</h3>
+                <button class="close-btn" onclick="closeModal('user-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <form id="user-form" class="modern-form">
+                <input type="hidden" id="user-id">
+                
+                <div class="form-group">
+                    <label for="user-name">Nome Completo <span class="required">*</span></label>
+                    <input type="text" id="user-name" required placeholder="Digite o nome do paciente">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="user-email">E-mail <span class="required">*</span></label>
+                        <input type="email" id="user-email" required placeholder="exemplo@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-phone">Telefone <span class="required">*</span></label>
+                        <input type="tel" id="user-phone" required placeholder="(00) 00000-0000">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('user-modal')">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="btn-save-user">
+                        <i class='bx bx-save'></i> Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Exclusão -->
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal-content glass-panel delete-modal">
+            <div class="modal-icon warning">
+                <i class='bx bx-error-circle'></i>
+            </div>
+            <h3>Excluir Paciente</h3>
+            <p>Tem certeza que deseja excluir este paciente? Esta ação não pode ser desfeita.</p>
+            <div class="form-actions center">
+                <button type="button" class="btn-secondary" onclick="closeModal('delete-modal')">Cancelar</button>
+                <button type="button" class="btn-danger" id="btn-confirm-delete">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/app.js"></script>
+</body>
+</html>

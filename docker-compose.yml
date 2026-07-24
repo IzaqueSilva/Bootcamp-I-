@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     container_name: medalerta-app
+    command: mvn spring-boot:run -Dspring-boot.run.profiles=dev
     depends_on:
       db:
         condition: service_healthy
