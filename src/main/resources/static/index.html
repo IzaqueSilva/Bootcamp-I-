@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Boxicons para ícones elegantes -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -29,23 +29,23 @@
             </div>
             
             <nav class="nav-menu">
-                <a href="#" class="nav-item active">
+                <a href="#" class="nav-item active" data-target="view-dashboard">
                     <i class='bx bx-grid-alt'></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="#" class="nav-item" data-target="view-pacientes">
                     <i class='bx bx-user-circle'></i>
                     <span>Pacientes</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="#" class="nav-item" data-target="view-medicamentos">
                     <i class='bx bx-capsule'></i>
                     <span>Medicamentos</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="#" class="nav-item" data-target="view-alertas">
                     <i class='bx bx-bell'></i>
                     <span>Alertas</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="#" class="nav-item" data-target="view-configuracoes">
                     <i class='bx bx-cog'></i>
                     <span>Configurações</span>
                 </a>
@@ -70,47 +70,94 @@
                 </div>
                 
                 <div class="header-actions">
-                    <button class="icon-btn glass-panel"><i class='bx bx-bell'></i><span class="badge">3</span></button>
-                    <button class="icon-btn glass-panel"><i class='bx bx-moon'></i></button>
-                </div>
-            </header>
-
-            <!-- Dashboard Content -->
-            <div class="dashboard-grid">
-                <!-- Seção de Estatísticas -->
-                <div class="stat-cards">
-                    <div class="stat-card glass-panel accent-blue">
-                        <div class="stat-icon"><i class='bx bx-user'></i></div>
-                        <div class="stat-details">
-                            <h3>Total de Pacientes</h3>
-                            <h2 id="total-users">--</h2>
-                            <p class="trend positive"><i class='bx bx-up-arrow-alt'></i> +12% esta semana</p>
+                    <!-- Dropdown de Notificações -->
+                    <div class="dropdown-wrapper">
+                        <button class="icon-btn glass-panel" id="btn-notifications"><i class='bx bx-bell'></i><span class="badge" id="alerts-badge">0</span></button>
+                        <div class="dropdown-menu glass-panel" id="notifications-dropdown">
+                            <div class="dropdown-header">
+                                <h4>Alertas do Sistema</h4>
+                            </div>
+                            <div class="dropdown-content" id="notifications-list">
+                                <div class="notification-item">
+                                    <p class="notif-desc">Nenhum alerta no momento.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="stat-card glass-panel accent-cyan">
-                        <div class="stat-icon"><i class='bx bx-check-shield'></i></div>
-                        <div class="stat-details">
-                            <h3>Alertas Emitidos</h3>
-                            <h2>1,284</h2>
-                            <p class="trend positive"><i class='bx bx-up-arrow-alt'></i> +5% esta semana</p>
-                        </div>
-                    </div>
-
-                    <div class="stat-card glass-panel accent-purple">
-                        <div class="stat-icon"><i class='bx bx-time-five'></i></div>
-                        <div class="stat-details">
-                            <h3>Adesão ao Tratamento</h3>
-                            <h2>89.5%</h2>
-                            <p class="trend neutral"><i class='bx bx-minus'></i> Estável</p>
-                        </div>
-                    </div>
+                    <button class="icon-btn glass-panel" id="btn-theme-toggle"><i class='bx bx-sun'></i></button>
                 </div>
+            </header>
 
-                <!-- Tabela de Pacientes (Consumindo a API) -->
+            <!-- ================= VIEW: DASHBOARD ================= -->
+            <div id="view-dashboard" class="view-section active">
+                <div class="dashboard-grid">
+                    <!-- Seção de Estatísticas -->
+                    <div class="stat-cards">
+                        <div class="stat-card glass-panel accent-blue">
+                            <div class="stat-icon"><i class='bx bx-user'></i></div>
+                            <div class="stat-details">
+                                <h3>Total de Pacientes</h3>
+                                <h2 id="total-users">--</h2>
+                                <p class="trend positive"><i class='bx bx-up-arrow-alt'></i> Dados reais</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card glass-panel accent-cyan">
+                            <div class="stat-icon"><i class='bx bx-check-shield'></i></div>
+                            <div class="stat-details">
+                                <h3>Perfis Incompletos</h3>
+                                <h2 id="total-alertas">--</h2>
+                                <p class="trend neutral"><i class='bx bx-info-circle'></i> Faltam dados</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glass-panel accent-purple">
+                            <div class="stat-icon"><i class='bx bx-time-five'></i></div>
+                            <div class="stat-details">
+                                <h3>Adesão (Perfis)</h3>
+                                <h2 id="taxa-adesao">--%</h2>
+                                <p class="trend positive"><i class='bx bx-check'></i> Calculado</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Pacientes (Consumindo a API) -->
+                    <section class="data-section glass-panel">
+                        <div class="section-header">
+                            <h2>Visão Geral de Pacientes</h2>
+                            <button class="primary-btn" onclick="document.querySelector('[data-target=\'view-pacientes\']').click()"><i class='bx bx-right-arrow-alt'></i> Gerenciar</button>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nome do Paciente</th>
+                                        <th>Email</th>
+                                        <th>Telefone</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dashboard-table-body">
+                                    <tr>
+                                        <td colspan="5" class="loading-state">
+                                            <i class='bx bx-loader-alt bx-spin'></i> Carregando dados da API...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- ================= VIEW: PACIENTES ================= -->
+            <div id="view-pacientes" class="view-section">
                 <section class="data-section glass-panel">
                     <div class="section-header">
-                        <h2>Lista de Pacientes Registrados</h2>
+                        <h2>Gestão Completa de Pacientes</h2>
                         <button class="primary-btn" onclick="openModal('user-modal')"><i class='bx bx-plus'></i> Novo Paciente</button>
                     </div>
                     
@@ -129,13 +176,84 @@
                             <tbody id="users-table-body">
                                 <tr>
                                     <td colspan="6" class="loading-state">
-                                        <i class='bx bx-loader-alt bx-spin'></i> Carregando dados da API...
+                                        <i class='bx bx-loader-alt bx-spin'></i> Carregando...
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </section>
+            </div>
+
+            <!-- ================= VIEW: MEDICAMENTOS ================= -->
+            <div id="view-medicamentos" class="view-section">
+                <section class="data-section glass-panel">
+                    <div class="section-header">
+                        <h2>Gestão de Medicamentos</h2>
+                        <button class="primary-btn" onclick="openModal('med-modal')"><i class='bx bx-plus'></i> Novo Medicamento</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome Comercial / Genérico</th>
+                                    <th>Forma de Uso</th>
+                                    <th>Quantidade / Dosagem</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="meds-table-body">
+                                <tr>
+                                    <td colspan="5" class="loading-state">
+                                        <i class='bx bx-loader-alt bx-spin'></i> Carregando dados...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= VIEW: ALERTAS / PRESCRIÇÕES ================= -->
+            <div id="view-alertas" class="view-section">
+                <section class="data-section glass-panel">
+                    <div class="section-header">
+                        <h2>Painel de Prescrições e Alertas</h2>
+                        <button class="primary-btn" onclick="openModal('prescricao-modal')"><i class='bx bx-plus'></i> Nova Prescrição</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Medicamento</th>
+                                    <th>Horário do Alerta</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="prescricoes-table-body">
+                                <tr>
+                                    <td colspan="5" class="loading-state">
+                                        <i class='bx bx-loader-alt bx-spin'></i> Carregando dados...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= VIEW: CONFIGURAÇÕES ================= -->
+            <div id="view-configuracoes" class="view-section">
+                <div class="glass-panel" style="padding: 60px; text-align: center;">
+                    <i class='bx bx-cog' style="font-size: 80px; color: var(--neon-purple); margin-bottom: 20px; text-shadow: var(--glow-purple);"></i>
+                    <h2 style="font-size: 28px; margin-bottom: 10px;">Configurações do Sistema</h2>
+                    <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto;">Preferências da conta, gestão de permissões e segurança.</p>
+                </div>
             </div>
         </main>
     </div>
@@ -171,7 +289,7 @@
 
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" onclick="closeModal('user-modal')">Cancelar</button>
-                    <button type="submit" class="btn-primary" id="btn-save-user">
+                    <button type="submit" class="primary-btn" id="btn-save-user">
                         <i class='bx bx-save'></i> Salvar
                     </button>
                 </div>
@@ -185,12 +303,103 @@
             <div class="modal-icon warning">
                 <i class='bx bx-error-circle'></i>
             </div>
-            <h3>Excluir Paciente</h3>
-            <p>Tem certeza que deseja excluir este paciente? Esta ação não pode ser desfeita.</p>
+            <h3>Excluir Registro</h3>
+            <p>Tem certeza que deseja excluir este registro? Esta ação não pode ser desfeita.</p>
             <div class="form-actions center">
                 <button type="button" class="btn-secondary" onclick="closeModal('delete-modal')">Cancelar</button>
                 <button type="button" class="btn-danger" id="btn-confirm-delete">Excluir</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Novo/Editar Medicamento -->
+    <div id="med-modal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="med-modal-title">Novo Medicamento</h3>
+                <button class="close-btn" onclick="closeModal('med-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <form id="med-form" class="modern-form">
+                <input type="hidden" id="med-id">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="med-nome">Nome Comercial <span class="required">*</span></label>
+                        <input type="text" id="med-nome" required placeholder="Ex: Tylenol">
+                    </div>
+                    <div class="form-group">
+                        <label for="med-generico">Nome Genérico</label>
+                        <input type="text" id="med-generico" placeholder="Ex: Paracetamol">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="med-uso">Forma de Uso</label>
+                        <input type="text" id="med-uso" placeholder="Ex: Oral (Comprimido)">
+                    </div>
+                    <div class="form-group">
+                        <label for="med-qtd">Dosagem/Quantidade</label>
+                        <input type="text" id="med-qtd" placeholder="Ex: 750mg">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="med-obs">Observações</label>
+                    <input type="text" id="med-obs" placeholder="Instruções adicionais...">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('med-modal')">Cancelar</button>
+                    <button type="submit" class="primary-btn" id="btn-save-med">
+                        <i class='bx bx-save'></i> Salvar Medicamento
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Nova Prescrição -->
+    <div id="prescricao-modal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="prescricao-modal-title">Nova Prescrição Médica</h3>
+                <button class="close-btn" onclick="closeModal('prescricao-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <form id="prescricao-form" class="modern-form">
+                
+                <div class="form-group">
+                    <label for="presc-paciente">Selecione o Paciente <span class="required">*</span></label>
+                    <select id="presc-paciente" required>
+                        <option value="">Carregando pacientes...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="presc-medicamento">Selecione o Medicamento <span class="required">*</span></label>
+                    <select id="presc-medicamento" required>
+                        <option value="">Carregando medicamentos...</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="presc-data">Data/Hora do Primeiro Alerta <span class="required">*</span></label>
+                        <input type="datetime-local" id="presc-data" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="presc-freq">Frequência (ex: a cada 8h)</label>
+                        <input type="text" id="presc-freq" placeholder="ex: 8 em 8 horas">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('prescricao-modal')">Cancelar</button>
+                    <button type="submit" class="primary-btn" id="btn-save-prescricao">
+                        <i class='bx bx-check-shield'></i> Ativar Alerta
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
